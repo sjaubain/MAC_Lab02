@@ -1,0 +1,86 @@
+---------------------WhiteSpaceAnalyzer-----------------------------------
+
+Number of queries: 64
+Number of qrels: 52
+Average number of relevant docs per query: 15.307692307692308
+Number of indexed documents: 3204
+WhitespaceAnalyzer
+Number of retrieved documents: 119812
+Number of relevant documents: 795
+Number of relevant documents retrieved: 235
+Average precision: 0.001986905072371431
+Average recall: 0.22976624829397285
+F-measure: 0.003939741207951527
+MAP: 0.0018618879183600696
+Average R-Precision: 0.0
+Average precision at recall levels: 
+	0: 0.0026679225847652424
+	1: 0.00248904331679494
+	2: 0.002407076854473509
+	3: 0.002303362686719288
+	4: 0.002303362686719288
+	5: 0.0021808705206423297
+	6: 0.0021808705206423297
+	7: 0.0021766027024669368
+	8: 0.0021766027024669368
+	9: 0.0021686534434076756
+	10: 0.0021686534434076756
+
+---------------------StandardAnalyzer-----------------------------------
+
+Number of queries: 64
+Number of qrels: 52
+Average number of relevant docs per query: 15.307692307692308
+Number of indexed documents: 3204
+StandardAnalyzer with set size 0
+Number of retrieved documents: 126722
+Number of relevant documents: 795
+Number of relevant documents retrieved: 262
+Average precision: 0.00196309051463181
+Average recall: 0.2594488156859591
+F-measure: 0.0038966971054083667
+MAP: 0.001878397436586758
+Average R-Precision: 0.0
+Average precision at recall levels: 
+	0: 0.0027281683880583476
+	1: 0.002621822654499128
+	2: 0.0025452634286412088
+	3: 0.0024415492608869872
+	4: 0.0024415492608869872
+	5: 0.002206680708834603
+	6: 0.002206680708834603
+	7: 0.00220241289065921
+	8: 0.00220241289065921
+	9: 0.0021946076292759516
+	10: 0.0021946076292759516
+
+---------------------EnglishAnalyzer-----------------------------------
+
+Number of queries: 64
+Number of qrels: 52
+Average number of relevant docs per query: 15.307692307692308
+Number of indexed documents: 3204
+EnglishAnalyzer with set size 33
+Number of retrieved documents: 81104
+Number of relevant documents: 795
+Number of relevant documents retrieved: 81
+Average precision: 9.718793240480719E-4
+Average recall: 0.10080928448322393
+F-measure: 0.0019251982507656378
+MAP: 0.0015687826780199166
+Average R-Precision: 0.0
+Average precision at recall levels: 
+	0: 0.002043330213907112
+	1: 0.001972800315868452
+	2: 0.001972800315868452
+	3: 0.0017996789394456082
+	4: 0.0017996789394456082
+	5: 0.0017097863470307121
+	6: 0.0015453404826919596
+	7: 0.001513086035839588
+	8: 0.001513086035839588
+	9: 0.001513086035839588
+	10: 0.001513086035839588
+
+
+

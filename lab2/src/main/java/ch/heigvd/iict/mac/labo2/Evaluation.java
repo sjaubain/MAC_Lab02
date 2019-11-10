@@ -113,15 +113,9 @@ public class Evaluation {
         avgQrels /= qrels.size();
         System.out.println("Average number of relevant docs per query: " + avgQrels);
 
-        //TODO student: use this when doing the english analyzer + common words
-        List<String> commonWords = readingCommonWords();
 
-        ///
-        ///  Part I - Select an analyzer
-        ///
-        // TODO student: compare Analyzers here i.e. change analyzer to
-        // the asked analyzers once the metrics have been implemented
-        analyzer = new WhitespaceAnalyzer();
+        List<String> commonWords = readingCommonWords();
+        analyzer = new EnglishAnalyzer();
 
 
         ///
@@ -136,19 +130,7 @@ public class Evaluation {
         ///  selected analyzer using performance metrics like F-measure,
         ///  precision, recall,...
         ///
-
-        // TODO student
-        // compute the metrics asked in the instructions
-        // you may want to call these methods to get:
-        // -  The query results returned by Lucene i.e. computed/empirical
-        //    documents retrieved
-        //        List<Integer> queryResults = lab2Index.search(query);
-        //
-        // - The true query results from qrels file i.e. genuine documents
-        //   returned matching a query
-        //        List<Integer> qrelResults = qrels.get(queryNumber);
-
-        int queryNumber = 0;
+        int queryNumber = 1;
         int totalRelevantDocs = 0;
         int totalRetrievedDocs = 0;
         int totalRetrievedRelevantDocs = 0;
@@ -161,12 +143,107 @@ public class Evaluation {
         // average precision at the 11 recall levels (0,0.1,0.2,...,1) over all queries
         double[] avgPrecisionAtRecallLevels = createZeroedRecalls();
 
-        ///
-        ///  Part IV - Display the metrics
-        ///
+        for(; queryNumber < queries.size(); ++queryNumber) {
 
-        //TODO student implement what is needed (i.e. the metrics) to be able
-        // to display the results
+            // Needed for each query
+            double AP = 0.0;
+            int totalRelevantDocsByQuery = 0;
+            int totalRetrievedDocsByQuery = 0;
+            int totalRetrievedRelevantDocsByQuery = 0;
+
+            List<Integer> retrievedDocsIds = lab2Index.search(queries.get(queryNumber));
+            totalRetrievedDocsByQuery = retrievedDocsIds.size();
+
+            // Check if query exist in qrels.txt (has at least one relevant doc)
+            if(qrels.containsKey(queryNumber)) {
+
+                totalRelevantDocsByQuery = qrels.get(queryNumber).size();
+
+                // Lookup for relevant retrieved docs
+                for(int i = 0; i < totalRetrievedDocsByQuery; ++i) {
+                    if(qrels.get(queryNumber).contains(i)) {
+                        totalRetrievedRelevantDocsByQuery++;
+                    }
+                }
+
+                if(totalRetrievedRelevantDocsByQuery != 0) { // There should be at least one relevant doc to perform following
+
+                    // AP for each query
+                    int nbRelevantDocsFound = 0;
+                    List<Double> recallLevels = new ArrayList<>();
+                    List<Double> precisions = new ArrayList<>();
+                    for (int i = 0; i < totalRetrievedDocsByQuery; ++i) {
+
+                        // Is retrievedDoc id=i relevant ?
+                        if (qrels.get(queryNumber).contains(i)) {
+                            nbRelevantDocsFound++;
+                            AP += (double) nbRelevantDocsFound / (i + 1);
+
+                            // add the recall index to the list
+                            recallLevels.add((double) nbRelevantDocsFound / totalRetrievedRelevantDocsByQuery);
+                            // and its associated precision
+                            precisions.add((double) nbRelevantDocsFound / (i + 1));
+                        }
+                    }
+                    meanAveragePrecision += (AP / nbRelevantDocsFound);
+
+                    // Fill the tab (code vraiment dégueu mais voilà..)
+                    double[] avgPrecisionAtRecallLevelsTmp = createZeroedRecalls();
+                    double maxPrecision = 0.0;
+                    int recallLevelIndex = 0;
+                    for(int i = 0; i < recallLevels.size(); ++i) {
+
+                        for(int j = i; j < recallLevels.size(); ++j) {
+                            if(precisions.get(j) > maxPrecision)
+                                maxPrecision = precisions.get(j);
+                        }
+
+                        for(int j = recallLevelIndex; j < 11; ++j) {
+                            avgPrecisionAtRecallLevelsTmp[j] = maxPrecision;
+                        }
+                        recallLevelIndex = (int)(10 * recallLevels.get(i));
+                        maxPrecision = 0.0;
+                    }
+                    for(int j = 0; j < 11; ++j) {
+                        avgPrecisionAtRecallLevels[j] += avgPrecisionAtRecallLevelsTmp[j];
+                    }
+
+                    // R-precision
+                    nbRelevantDocsFound = 0;
+                    for (int i = 0; i < totalRelevantDocsByQuery; ++i) {
+                        if (qrels.get(queryNumber).contains(i)) {
+                            nbRelevantDocsFound++;
+                        }
+                    }
+                    avgRPrecision += (double) nbRelevantDocsFound / totalRelevantDocsByQuery;
+                    avgRecall += (double) totalRetrievedRelevantDocsByQuery / totalRelevantDocsByQuery;
+                }
+
+            } else { // No relevant docs found
+                totalRelevantDocsByQuery = 0;
+                totalRetrievedRelevantDocsByQuery = 0;
+            }
+
+            // compute average of all queries
+            totalRelevantDocs += totalRelevantDocsByQuery;
+            totalRetrievedDocs += totalRetrievedDocsByQuery;
+            totalRetrievedRelevantDocs += totalRetrievedRelevantDocsByQuery;
+            avgPrecision += (double) totalRetrievedRelevantDocsByQuery / totalRetrievedDocsByQuery;
+        }
+
+        int nbQueries = queries.size();
+
+        avgPrecision /= nbQueries;
+        avgRecall /= nbQueries;
+        avgRPrecision /= nbQueries;
+        meanAveragePrecision /= nbQueries;
+        fMeasure = (2 * avgPrecision * avgRecall) / (avgPrecision + avgRecall); // 2RP/(R+P)
+
+        for(int j = 0; j < 11; ++j) {
+            avgPrecisionAtRecallLevels[j] /= nbQueries;
+        }
+
+        // Display summary metrics
         displayMetrics(totalRetrievedDocs, totalRelevantDocs,
                 totalRetrievedRelevantDocs, avgPrecision, avgRecall, fMeasure,
                 meanAveragePrecision, avgRPrecision,
