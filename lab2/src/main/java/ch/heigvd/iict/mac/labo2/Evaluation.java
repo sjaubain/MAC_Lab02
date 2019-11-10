@@ -1,18 +1,15 @@
 package ch.heigvd.iict.mac.labo2;
 
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.StopwordAnalyzerBase;
-import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
-import org.apache.lucene.analysis.en.EnglishAnalyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.*;
+import org.apache.lucene.analysis.core.StopAnalyzer;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Function;
+
 
 public class Evaluation {
 
@@ -115,7 +112,8 @@ public class Evaluation {
 
 
         List<String> commonWords = readingCommonWords();
-        analyzer = new EnglishAnalyzer();
+
+        analyzer = new StopAnalyzer(FileSystems.getDefault().getPath("common_words.txt"));
 
 
         ///

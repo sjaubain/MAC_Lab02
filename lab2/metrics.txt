@@ -82,5 +82,33 @@ Average precision at recall levels:
 	9: 0.011208915360083777
 	10: 0.011208915360083777
 
+-------------EnglishAnalyzerWhichIsInFactAStopAnalyzer,ILost1HourOnThis,Thanks------------
+
+
+Number of queries: 64
+Number of qrels: 52
+Average number of relevant docs per query: 15.307692307692308
+Number of indexed documents: 3204
+StopAnalyzer with set size 428
+Number of retrieved documents: 38205
+Number of relevant documents: 795
+Number of relevant documents retrieved: 302
+Average precision: 0.008947523833263218
+Average recall: 0.3126146123982583
+F-measure: 0.017397114771285485
+MAP: 0.023424285095751344
+Average R-Precision: 0.010923346861687517
+Average precision at recall levels: 
+	0: 0.041361469837233766
+	1: 0.037119088807246806
+	2: 0.02925651174734249
+	3: 0.024114366932363865
+	4: 0.023225778234168753
+	5: 0.01910350444213748
+	6: 0.018132572388088297
+	7: 0.015957079155781453
+	8: 0.014062478609956833
+	9: 0.013224428781025675
+	10: 0.013224428781025675
 
 
