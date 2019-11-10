@@ -130,7 +130,7 @@ public class Evaluation {
         ///  selected analyzer using performance metrics like F-measure,
         ///  precision, recall,...
         ///
-        int queryNumber = 1;
+        int queryNumber;
         int totalRelevantDocs = 0;
         int totalRetrievedDocs = 0;
         int totalRetrievedRelevantDocs = 0;
@@ -143,7 +143,7 @@ public class Evaluation {
         // average precision at the 11 recall levels (0,0.1,0.2,...,1) over all queries
         double[] avgPrecisionAtRecallLevels = createZeroedRecalls();
 
-        for(; queryNumber < queries.size(); ++queryNumber) {
+        for(queryNumber = 0; queryNumber < queries.size(); ++queryNumber) {
 
             // Needed for each query
             double AP = 0.0;
@@ -161,7 +161,7 @@ public class Evaluation {
 
                 // Lookup for relevant retrieved docs
                 for(int i = 0; i < totalRetrievedDocsByQuery; ++i) {
-                    if(qrels.get(queryNumber).contains(i)) {
+                    if(qrels.get(queryNumber).contains(retrievedDocsIds.get(i))) {
                         totalRetrievedRelevantDocsByQuery++;
                     }
                 }
@@ -175,7 +175,7 @@ public class Evaluation {
                     for (int i = 0; i < totalRetrievedDocsByQuery; ++i) {
 
                         // Is retrievedDoc id=i relevant ?
-                        if (qrels.get(queryNumber).contains(i)) {
+                        if (qrels.get(queryNumber).contains(retrievedDocsIds.get(i))) {
                             nbRelevantDocsFound++;
                             AP += (double) nbRelevantDocsFound / (i + 1);
 
@@ -211,7 +211,7 @@ public class Evaluation {
                     // R-precision
                     nbRelevantDocsFound = 0;
                     for (int i = 0; i < totalRelevantDocsByQuery; ++i) {
-                        if (qrels.get(queryNumber).contains(i)) {
+                        if (qrels.get(queryNumber).contains(retrievedDocsIds.get(i))) {
                             nbRelevantDocsFound++;
                         }
                     }
